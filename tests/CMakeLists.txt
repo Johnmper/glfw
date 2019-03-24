@@ -18,6 +18,8 @@ set(GETOPT "${GLFW_SOURCE_DIR}/deps/getopt.h"
 set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
                 "${GLFW_SOURCE_DIR}/deps/tinycthread.c")
 
+add_subdirectory(cxx_tests)
+
 add_executable(clipboard clipboard.c ${GETOPT} ${GLAD})
 add_executable(events events.c ${GETOPT} ${GLAD})
 add_executable(msaa msaa.c ${GETOPT} ${GLAD})
@@ -88,4 +90,3 @@ if (APPLE)
                           MACOSX_BUNDLE_LONG_VERSION_STRING ${GLFW_VERSION_FULL}
                           MACOSX_BUNDLE_INFO_PLIST "${GLFW_SOURCE_DIR}/CMake/MacOSXBundleInfo.plist.in")
 endif()
-

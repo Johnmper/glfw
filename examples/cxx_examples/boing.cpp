@@ -37,7 +37,7 @@
 #include <math.h>
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include <GLFW/glfw3cxx.h>
 
 #include <linmath.h>
 
@@ -49,10 +49,10 @@
 /* Prototypes */
 void init( void );
 void display( void );
-void reshape( GLFWwindow* window, int w, int h );
-void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods );
-void mouse_button_callback( GLFWwindow* window, int button, int action, int mods );
-void cursor_position_callback( GLFWwindow* window, double x, double y );
+void reshape( glfw::Window* window, int w, int h );
+void key_callback( glfw::Window* window, int key, int scancode, int action, int mods );
+void mouse_button_callback( glfw::Window* window, int button, int action, int mods );
+void cursor_position_callback( glfw::Window* window, double x, double y );
 void DrawBoingBall( void );
 void BounceBall( double dt );
 void DrawBoingBallBand( GLfloat long_lo, GLfloat long_hi );
@@ -212,7 +212,7 @@ void display(void)
 /*****************************************************************************
  * reshape()
  *****************************************************************************/
-void reshape( GLFWwindow* window, int w, int h )
+void reshape( glfw::Window* window, int w, int h )
 {
    mat4x4 projection, view;
 
@@ -235,31 +235,31 @@ void reshape( GLFWwindow* window, int w, int h )
    glLoadMatrixf((const GLfloat*) view);
 }
 
-void key_callback( GLFWwindow* window, int key, int scancode, int action, int mods )
+void key_callback( glfw::Window* window, int key, int scancode, int action, int mods )
 {
     if (action != GLFW_PRESS)
         return;
 
     if (key == GLFW_KEY_ESCAPE && mods == 0)
-        glfwSetWindowShouldClose(window, GLFW_TRUE);
+        glfw::SetWindowShouldClose(window, GLFW_TRUE);
     if ((key == GLFW_KEY_ENTER && mods == GLFW_MOD_ALT) ||
         (key == GLFW_KEY_F11 && mods == GLFW_MOD_ALT))
     {
-        if (glfwGetWindowMonitor(window))
+        if (glfw::GetWindowMonitor(window))
         {
-            glfwSetWindowMonitor(window, NULL,
+            glfw::SetWindowMonitor(window, NULL,
                                  windowed_xpos, windowed_ypos,
                                  windowed_width, windowed_height, 0);
         }
         else
         {
-            GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+            glfw::Monitor* monitor = glfw::GetPrimaryMonitor();
             if (monitor)
             {
-                const GLFWvidmode* mode = glfwGetVideoMode(monitor);
-                glfwGetWindowPos(window, &windowed_xpos, &windowed_ypos);
-                glfwGetWindowSize(window, &windowed_width, &windowed_height);
-                glfwSetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+                const glfw::VidMode* mode = glfw::GetVideoMode(monitor);
+                glfw::GetWindowPos(window, &windowed_xpos, &windowed_ypos);
+                glfw::GetWindowSize(window, &windowed_width, &windowed_height);
+                glfw::SetWindowMonitor(window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
             }
         }
     }
@@ -271,7 +271,7 @@ static void set_ball_pos ( GLfloat x, GLfloat y )
    ball_y = y - (height / 2);
 }
 
-void mouse_button_callback( GLFWwindow* window, int button, int action, int mods )
+void mouse_button_callback( glfw::Window* window, int button, int action, int mods )
 {
    if (button != GLFW_MOUSE_BUTTON_LEFT)
       return;
@@ -287,7 +287,7 @@ void mouse_button_callback( GLFWwindow* window, int button, int action, int mods
    }
 }
 
-void cursor_position_callback( GLFWwindow* window, double x, double y )
+void cursor_position_callback( glfw::Window* window, double x, double y )
 {
    cursor_x = (float) x;
    cursor_y = (float) y;
@@ -621,34 +621,34 @@ void DrawGrid( void )
 
 int main( void )
 {
-   GLFWwindow* window;
+   glfw::Window* window;
 
    /* Init GLFW */
-   if( !glfwInit() )
+   if( !glfw::Init() )
       exit( EXIT_FAILURE );
 
-   window = glfwCreateWindow( 400, 400, "Boing (classic Amiga demo)", NULL, NULL );
+   window = glfw::CreateWindow( 400, 400, "Boing (classic Amiga demo)", NULL, NULL );
    if (!window)
    {
-       glfwTerminate();
+       glfw::Terminate();
        exit( EXIT_FAILURE );
    }
 
-   glfwSetWindowAspectRatio(window, 1, 1);
+   glfw::SetWindowAspectRatio(window, 1, 1);
 
-   glfwSetFramebufferSizeCallback(window, reshape);
-   glfwSetKeyCallback(window, key_callback);
-   glfwSetMouseButtonCallback(window, mouse_button_callback);
-   glfwSetCursorPosCallback(window, cursor_position_callback);
+   glfw::SetFramebufferSizeCallback(window, reshape);
+   glfw::SetKeyCallback(window, key_callback);
+   glfw::SetMouseButtonCallback(window, mouse_button_callback);
+   glfw::SetCursorPosCallback(window, cursor_position_callback);
 
-   glfwMakeContextCurrent(window);
-   gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-   glfwSwapInterval( 1 );
+   glfw::MakeContextCurrent(window);
+   gladLoadGLLoader((GLADloadproc) glfw::GetProcAddress);
+   glfw::SwapInterval( 1 );
 
-   glfwGetFramebufferSize(window, &width, &height);
+   glfw::GetFramebufferSize(window, &width, &height);
    reshape(window, width, height);
 
-   glfwSetTime( 0.0 );
+   glfw::SetTime( 0.0 );
 
    init();
 
@@ -656,7 +656,7 @@ int main( void )
    for (;;)
    {
        /* Timing */
-       t = glfwGetTime();
+       t = glfw::GetTime();
        dt = t - t_old;
        t_old = t;
 
@@ -664,14 +664,14 @@ int main( void )
        display();
 
        /* Swap buffers */
-       glfwSwapBuffers(window);
-       glfwPollEvents();
+       glfw::SwapBuffers(window);
+       glfw::PollEvents();
 
        /* Check if we are still running */
-       if (glfwWindowShouldClose(window))
+       if (glfw::WindowShouldClose(window))
            break;
    }
 
-   glfwTerminate();
+   glfw::Terminate();
    exit( EXIT_SUCCESS );
 }

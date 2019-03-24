@@ -30,6 +30,8 @@ set(GETOPT "${GLFW_SOURCE_DIR}/deps/getopt.h"
 set(TINYCTHREAD "${GLFW_SOURCE_DIR}/deps/tinycthread.h"
                 "${GLFW_SOURCE_DIR}/deps/tinycthread.c")
 
+add_subdirectory(cxx_examples)
+
 add_executable(boing WIN32 MACOSX_BUNDLE boing.c ${ICON} ${GLAD})
 add_executable(gears WIN32 MACOSX_BUNDLE gears.c ${ICON} ${GLAD})
 add_executable(heightmap WIN32 MACOSX_BUNDLE heightmap.c ${ICON} ${GLAD})
@@ -74,4 +76,3 @@ if (APPLE)
                           MACOSX_BUNDLE_ICON_FILE glfw.icns
                           MACOSX_BUNDLE_INFO_PLIST "${GLFW_SOURCE_DIR}/CMake/MacOSXBundleInfo.plist.in")
 endif()
-

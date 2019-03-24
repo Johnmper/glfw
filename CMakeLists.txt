@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 
-project(GLFW C)
+project(GLFW)
 
 set(CMAKE_LEGACY_CYGWIN_WIN32 OFF)
 
@@ -382,4 +382,3 @@ if (GLFW_INSTALL)
         set_target_properties(uninstall PROPERTIES FOLDER "GLFW3")
     endif()
 endif()
-
