@@ -29,8 +29,7 @@
 
 #include "linmath.h"
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <iostream>
 
 static const struct
 {
@@ -65,7 +64,7 @@ static const char* fragment_shader_text =
 
 static void error_callback(int error, const char* description)
 {
-    fprintf(stderr, "Error: %s\n", description);
+    std::cerr << "Error: " << description << std::endl;
 }
 
 static void key_callback(glfw::Window* window, int key, int scancode, int action, int mods)
@@ -82,17 +81,17 @@ int main(void)
 
     glfw::SetErrorCallback(error_callback);
 
-    if (!glfw::Init())
-        exit(EXIT_FAILURE);
+    if (!glfw::Init()){
+        return EXIT_FAILURE;
+    }
 
     glfw::WindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfw::WindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     window = glfw::CreateWindow(640, 480, "Simple example", NULL, NULL);
-    if (!window)
-    {
+    if (!window){
         glfw::Terminate();
-        exit(EXIT_FAILURE);
+        return EXIT_FAILURE;
     }
 
     glfw::SetKeyCallback(window, key_callback);
@@ -125,11 +124,9 @@ int main(void)
     vcol_location = glGetAttribLocation(program, "vCol");
 
     glEnableVertexAttribArray(vpos_location);
-    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-                          sizeof(vertices[0]), (void*) 0);
+    glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) 0);
     glEnableVertexAttribArray(vcol_location);
-    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-                          sizeof(vertices[0]), (void*) (sizeof(float) * 2));
+    glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]), (void*) (sizeof(float) * 2));
 
     while (!glfw::WindowShouldClose(window))
     {
@@ -159,7 +156,7 @@ int main(void)
     glfw::DestroyWindow(window);
 
     glfw::Terminate();
-    exit(EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 //! [code]
